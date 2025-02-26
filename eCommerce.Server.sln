@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eCommerce.Server", "eCommer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eCommerce.Domain", "eCommerce.Domain\eCommerce.Domain.csproj", "{5796AC64-03DD-4C31-BE11-D26B4B613687}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eCommerce.Applicaton", "eCommerce.Applicaton\eCommerce.Applicaton.csproj", "{19BC865F-31A6-470D-93B4-29A9E207A9B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eCommerce.Application", "eCommerce.Applicaton\eCommerce.Application.csproj", "{19BC865F-31A6-470D-93B4-29A9E207A9B3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eCommerce.Infrastructure", "eCommerce.Infrastructure\eCommerce.Infrastructure.csproj", "{1BC0DEAB-4EA3-4195-9A79-F34375310BBE}"
 EndProject
