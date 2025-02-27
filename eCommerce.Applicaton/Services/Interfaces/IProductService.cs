@@ -10,7 +10,7 @@ namespace eCommerce.Application.Services.Interfaces
 {
     public interface IProductService
     {
-        Task<IEnumerable<CreateProduct>> GetAllAsync();
+        Task<IEnumerable<GetProduct>> GetAllAsync();
         Task<GetProduct> GetByIdAsync(Guid id);
         Task<ServiceResponse> AddAsync(CreateProduct entity);
         Task<ServiceResponse> UpdateAsync(UpdateProduct entity);

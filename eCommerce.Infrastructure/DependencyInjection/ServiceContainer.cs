@@ -19,6 +19,7 @@ namespace eCommerce.Infrastructure.DependencyInjection
 
         public static IServiceCollection AddInfrastructureService(this IServiceCollection services, IConfiguration config)
         {
+            string connectionString = "DefaultConnection";
             services.AddDbContext<AppDbContext>(options =>
                  options.UseSqlServer(config.GetConnectionString(connectionString),
                     sqlOptions =>

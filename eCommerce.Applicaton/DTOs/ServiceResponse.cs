@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eCommerce.Application.DTOs
+namespace eCommerce.Application.DTOs 
 {
-    public class ServiceResponse(bool success = false, string message = ""!);
+    public record ServiceResponse(bool success = false, string? message = null!);
    
 }

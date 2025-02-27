@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using eCommerce.Application.DTOs;
 using eCommerce.Application.DTOs.Category;
+using eCommerce.Application.Exceptions;
 using eCommerce.Application.Services.Interfaces;
 using eCommerce.Domain.Entities;
 using eCommerce.Domain.Interfaces;
@@ -12,21 +13,23 @@ namespace eCommerce.Application.Services.Implementations
         public async Task<ServiceResponse> AddAsync(CreateCategory entity)
         {
             var mappedData = mapper.Map<Category>(entity);
-            int result = await category.AddAsync(mappedData);
+            _ = await category.AddAsync(mappedData);
             return new ServiceResponse(true, "category added successfully");
         }
 
         public async Task<ServiceResponse> DeleteAsync(Guid id)
         {
             int result = await category.DeleteAsync(id);
-            return result > 0 ? new ServiceResponse(true, "category deleted successfully") : new ServiceResponse(false, "category failed to delete");
+
+            return result <= 0 ? new ServiceResponse(false, "category not found or failed to be deleted") :
+                new ServiceResponse(true, "category was deleted successfully");
         }
 
-        public async Task<IEnumerable<CreateCategory>> GetAllAsync()
+        public async Task<IEnumerable<GetCategory>> GetAllAsync()
         {
             var rawData = await category.GetAllAsync();
             if (!rawData.Any()) return [];
-            return mapper.Map<IEnumerable<CreateCategory>>(rawData);
+            return mapper.Map<IEnumerable<GetCategory>>(rawData);
         }
 
         public async Task<GetCategory> GetByIdAsync(Guid id)
@@ -38,9 +41,18 @@ namespace eCommerce.Application.Services.Implementations
 
         public async Task<ServiceResponse> UpdateAsync(UpdateCategory entity)
         {
-            var mappedData = mapper.Map<Category>(entity);
+            var existingCategory = await category.GetByIdAsync(entity.Id);
+            if (existingCategory == null)
+            {
+                return new ServiceResponse(false, "Category not found");
+            }
+
+
+            var mappedData = mapper.Map(entity, existingCategory);  // Map changes to existing entity
+
             var result = await category.UpdateAsync(mappedData);
-            return result != null ? new ServiceResponse(true, "category deleted successfully") : new ServiceResponse(false, "category failed to delete");
+            return result != null ? new ServiceResponse(true, "Category updated successfully")
+                                  : new ServiceResponse(false, "Category failed to update");         
         }
     }
 }
