@@ -4,10 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eCommerce.Application.DTOs.Products
+namespace eCommerce.Application.DTOs
 {
-    public class CreateProduct : ProductBase
-    {
-        
-    }
+    public class ServiceResponse(bool success = false, string message = ""!);
+   
 }

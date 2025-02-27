@@ -1,6 +1,6 @@
 ﻿namespace eCommerce.Application.DTOs.Products
 {
-    public class CategoryBase
+    public class ProductBase
     {
         public string? Name { get; set; }
         public string? Description { get; set; }

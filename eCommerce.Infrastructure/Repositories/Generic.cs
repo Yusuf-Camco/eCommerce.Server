@@ -1,6 +1,7 @@
 ﻿using eCommerce.Application.Exceptions;
 using eCommerce.Domain.Interfaces;
 using eCommerce.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,25 +20,23 @@ namespace eCommerce.Infrastructure.Repositories
 
         public async Task<int> DeleteAsync(Guid id)
         {
-            var entity = await context.Set<T>().FindAsync(id) ?? 
+            var entity = await context.Set<T>().FindAsync(id) ??
                 throw new ItemNotFound($"item with {id} is not found");
             context.Set<T>().Remove(entity);
             return await context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync() => await context.Set<T>().AsNoTracking<T>().ToListAsync();
+
+
+        public async Task<T> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var entity = await context.Set<T>().FindAsync(id) ??
+                throw new ItemNotFound($"item with {id} is not found");
+            return entity!;
         }
 
-        public Task<T> GetByIdAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<T> UpdateAsync(T entity)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<T> UpdateAsync(T entity) => await context.SaveChangesAsync() > 0 ? context.Set<T>().Update(entity).Entity : throw new Exception("Failed to update entity");
     }
 }
+
