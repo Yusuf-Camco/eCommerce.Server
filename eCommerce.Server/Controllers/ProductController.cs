@@ -9,7 +9,7 @@ namespace eCommerce.Server.Controllers
     [ApiController]
     public class ProductController(IProductService service) : ControllerBase
     {
-        [HttpGet("all")]
+        [HttpGet("getAll")]
         public async Task<IActionResult> GetAll()
         {
             var result = await service.GetAllAsync();
@@ -26,6 +26,8 @@ namespace eCommerce.Server.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> Add(CreateProduct entity)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
             var result = await service.AddAsync(entity);
             return result != null ? Ok(result) : BadRequest(result);
         }
@@ -33,6 +35,8 @@ namespace eCommerce.Server.Controllers
         [HttpPut("update")]
         public async Task<IActionResult> Update(UpdateProduct entity)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
             var result = await service.UpdateAsync(entity);
             return result != null ? Ok(result) : BadRequest(result);
         }
