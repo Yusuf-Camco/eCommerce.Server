@@ -1,7 +1,12 @@
-﻿using eCommerce.Domain.Entities;
+﻿using eCommerce.Application.Services.Interfaces.Logging;
+using eCommerce.Domain.Entities;
 using eCommerce.Domain.Interfaces;
 using eCommerce.Infrastructure.Data;
+using eCommerce.Infrastructure.Middleware;
 using eCommerce.Infrastructure.Repositories;
+using eCommerce.Infrastructure.Repositories.Services;
+using EntityFramework.Exceptions.SqlServer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +20,6 @@ namespace eCommerce.Infrastructure.DependencyInjection
 {
     public static class ServiceContainer
     {
-        private static string connectionString = "DefaultConnection";
 
         public static IServiceCollection AddInfrastructureService(this IServiceCollection services, IConfiguration config)
         {
@@ -26,14 +30,22 @@ namespace eCommerce.Infrastructure.DependencyInjection
                     {
                         sqlOptions.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
                         sqlOptions.EnableRetryOnFailure();
-                    }),
+                    }).UseExceptionProcessor(),
                     ServiceLifetime.Scoped);
-           
 
-            services.AddScoped(typeof(IGeneric<Product>), typeof(Generic<Product>)); 
+
+            services.AddScoped(typeof(IGeneric<Product>), typeof(Generic<Product>));
             services.AddScoped(typeof(IGeneric<Category>), typeof(Generic<Category>));
+            services.AddScoped(typeof(IAppLogger<>), typeof(SerilogLoggerAdapter<>));      
 
-            return services; // Added missing return statement
+            return services;
+        }
+
+        public static IApplicationBuilder UseInfrastructureService(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+            return app;
         }
     }
 

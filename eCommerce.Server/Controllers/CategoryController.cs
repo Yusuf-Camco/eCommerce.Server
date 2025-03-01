@@ -8,7 +8,7 @@ namespace eCommerce.Server.Controllers
     [ApiController]
     public class CategoryController(ICategoryService service) : ControllerBase
     {
-        [HttpGet("all")]
+        [HttpGet("getAll")]
         public async Task<IActionResult> GetAll()
         {
 
@@ -26,6 +26,7 @@ namespace eCommerce.Server.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> Add(CreateCategory entity)
         {
+            if(!ModelState.IsValid) return BadRequest(ModelState);
             var result = await service.AddAsync(entity);
             return result.success ? Ok(result) : BadRequest(result);
         }
@@ -33,6 +34,8 @@ namespace eCommerce.Server.Controllers
         [HttpPut("update")]
         public async Task<IActionResult> Update(UpdateCategory entity)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
             var result = await service.UpdateAsync(entity);
             return result.success ? Ok(result) : BadRequest(result);
         }
