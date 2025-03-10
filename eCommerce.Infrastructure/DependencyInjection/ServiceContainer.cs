@@ -1,12 +1,16 @@
 ﻿using eCommerce.Application.Services.Interfaces.Logging;
 using eCommerce.Domain.Entities;
+using eCommerce.Domain.Entities.Identity;
 using eCommerce.Domain.Interfaces;
+using eCommerce.Domain.Interfaces.Authentications;
 using eCommerce.Infrastructure.Data;
 using eCommerce.Infrastructure.Middleware;
 using eCommerce.Infrastructure.Repositories;
+using eCommerce.Infrastructure.Repositories.Authentication;
 using eCommerce.Infrastructure.Repositories.Services;
 using EntityFramework.Exceptions.SqlServer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,7 +40,52 @@ namespace eCommerce.Infrastructure.DependencyInjection
 
             services.AddScoped(typeof(IGeneric<Product>), typeof(Generic<Product>));
             services.AddScoped(typeof(IGeneric<Category>), typeof(Generic<Category>));
-            services.AddScoped(typeof(IAppLogger<>), typeof(SerilogLoggerAdapter<>));      
+            services.AddScoped(typeof(IAppLogger<>), typeof(SerilogLoggerAdapter<>));
+            services.AddDefaultIdentity<AppUser>(opt =>
+            {
+                opt.SignIn.RequireConfirmedEmail = true;
+                opt.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
+                opt.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultEmailProvider;
+                opt.Password.RequireDigit = true;
+                opt.Password.RequireLowercase = true;
+                opt.Password.RequireNonAlphanumeric = true;
+                opt.Password.RequireUppercase = true;
+                opt.Password.RequiredLength = 8;
+                opt.Password.RequireLowercase = true;
+                opt.Password.RequiredUniqueChars = 1;
+            })
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>();
+
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+                opt.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+                opt.DefaultChallengeScheme = IdentityConstants.ExternalScheme;
+            })
+                .AddJwtBearer(opt =>
+                {
+                    opt.SaveToken = true;
+                    opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        RequireExpirationTime = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = config["JWT:Issuer"],
+                        ValidAudience = config["JWT:Audience"],
+                        ClockSkew = TimeSpan.Zero,
+                        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:Key"]))
+                    };
+
+                    //opt.Audience = config["JWT:Audience"];
+                    //opt.Authority = config["JWT:Authority"];
+                    //opt.RequireHttpsMetadata = false;
+                });
+            services.AddScoped<IUserManagement, UserManagement>();
+            services.AddScoped<IRoleManagement, RoleManagement>();
+            services.AddScoped<ITokenManagement, TokenManagement>();
 
             return services;
         }

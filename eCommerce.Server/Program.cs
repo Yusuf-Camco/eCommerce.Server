@@ -23,20 +23,25 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 builder.Services.AddApplicationService();
 builder.Services.AddInfrastructureService(builder.Configuration);
-builder.Services.AddCors(policy =>
+builder.Services.AddCors(builder =>
 {
-    policy.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-}
-);
+    builder.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:44345", "https://localhost:44345")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+});
 
 try
 {
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
+    app.UseCors();
     app.UseSerilogRequestLogging();
     if (app.Environment.IsDevelopment())
     {
@@ -56,7 +61,7 @@ try
 catch (Exception ex)
 {
 
-	Log.Logger.Error(ex, "Application failed to start.....");
+    Log.Logger.Error(ex, "Application failed to start.....");
 }
 finally
 {

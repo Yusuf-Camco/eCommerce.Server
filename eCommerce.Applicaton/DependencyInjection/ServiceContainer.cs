@@ -1,6 +1,9 @@
 ﻿using eCommerce.Application.Mapping;
 using eCommerce.Application.Services.Implementations;
 using eCommerce.Application.Services.Interfaces;
+using eCommerce.Application.Validations.Authentication;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace eCommerce.Application.DependencyInjection
@@ -11,7 +14,11 @@ namespace eCommerce.Application.DependencyInjection
         {
             services.AddAutoMapper(typeof(MappingConfig));
             services.AddScoped<IProductService, ProductService>();   
-            services.AddScoped<ICategoryService, CategoryService>();   
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddFluentValidationAutoValidation();
+            services.AddValidatorsFromAssemblyContaining<CreateUserValidator>();
+            services.AddScoped<IValidationService, ValidationService>();
+
             return services;
         }
     }
