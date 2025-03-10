@@ -28,7 +28,7 @@ namespace eCommerce.Server.Controllers
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);
             var result = await service.AddAsync(entity);
-            return result.success ? Ok(result) : BadRequest(result);
+            return result.Success ? Ok(result) : BadRequest(result);
         }
 
         [HttpPut("update")]
@@ -37,14 +37,14 @@ namespace eCommerce.Server.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var result = await service.UpdateAsync(entity);
-            return result.success ? Ok(result) : BadRequest(result);
+            return result.Success ? Ok(result) : BadRequest(result);
         }
 
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var result = await service.DeleteAsync(id);
-            return result.success ? Ok(result) : BadRequest(result);
+            return result.Success ? Ok(result) : BadRequest(result);
         }
     }
 }
