@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35818.85 d17.13
+VisualStudioVersion = 17.13.35818.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eCommerce.Server", "eCommerce.Server\eCommerce.Server.csproj", "{921D0B3F-0C08-4155-8478-64E49081CB5A}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eCommerce.Application", "eCommerce.Applicaton\eCommerce.Application.csproj", "{19BC865F-31A6-470D-93B4-29A9E207A9B3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eCommerce.Infrastructure", "eCommerce.Infrastructure\eCommerce.Infrastructure.csproj", "{1BC0DEAB-4EA3-4195-9A79-F34375310BBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecretKeyGen", "SecretKeyGen\SecretKeyGen.csproj", "{2CDF6211-CD0D-4813-A89A-AC6A52B83922}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{1BC0DEAB-4EA3-4195-9A79-F34375310BBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BC0DEAB-4EA3-4195-9A79-F34375310BBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BC0DEAB-4EA3-4195-9A79-F34375310BBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CDF6211-CD0D-4813-A89A-AC6A52B83922}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CDF6211-CD0D-4813-A89A-AC6A52B83922}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CDF6211-CD0D-4813-A89A-AC6A52B83922}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CDF6211-CD0D-4813-A89A-AC6A52B83922}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

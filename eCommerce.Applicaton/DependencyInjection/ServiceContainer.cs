@@ -1,6 +1,8 @@
 ﻿using eCommerce.Application.Mapping;
 using eCommerce.Application.Services.Implementations;
+using eCommerce.Application.Services.Implementations.Authentication;
 using eCommerce.Application.Services.Interfaces;
+using eCommerce.Application.Services.Interfaces.Authentication;
 using eCommerce.Application.Validations.Authentication;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -18,6 +20,7 @@ namespace eCommerce.Application.DependencyInjection
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssemblyContaining<CreateUserValidator>();
             services.AddScoped<IValidationService, ValidationService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             return services;
         }
