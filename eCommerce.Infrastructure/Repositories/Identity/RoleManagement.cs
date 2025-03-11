@@ -10,8 +10,11 @@ namespace eCommerce.Infrastructure.Repositories.Authentication
 {
     class RoleManagement(UserManager<AppUser> userManager) : IRoleManagement
     {
-        public async Task<bool> AddUserToRole(AppUser user, string roleName) => 
-            (await userManager.AddToRoleAsync(user, roleName)).Succeeded;
+        public async Task<bool> AddUserToRole(AppUser user, string roleName)
+        {
+            var result = await userManager.AddToRoleAsync(user, roleName);
+            return result.Succeeded;
+        }
 
         public async Task<string?> GetUserRole(string userEmail)
         {

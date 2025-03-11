@@ -12,7 +12,7 @@ namespace eCommerce.Infrastructure.Repositories.Authentication
         public async Task<bool> CreateUserAsync(AppUser user)
         {
             var _user = await GetUserByEmailAsync(user.Email!);
-            if (user != null) 
+            if (_user != null) 
             {
                 return false;
             }
