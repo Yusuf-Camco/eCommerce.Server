@@ -9,18 +9,19 @@ namespace eCommerce.Server.Controllers
     [ApiController]
     public class AuthController(IAuthenticationService authService) : ControllerBase()
     {
-        [HttpGet("getAll")]
-        public async Task<IActionResult> GetAll()
-        {
-            var result = await authService.GetAllUsers();
-            return result.Count() > 0 ? Ok(result) : NotFound(result);
-        }
-
+        
         [HttpPost("create")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUser user)
         {
             var result = await authService.CreateUser(user);
             return result.Success ? Ok(result) : BadRequest(result);
+        }
+
+        [HttpGet("getAll")]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await authService.GetAllUsers();
+            return result.Count() > 0 ? Ok(result) : NotFound(result);
         }
 
 
