@@ -58,9 +58,21 @@ namespace eCommerce.Infrastructure.Repositories.Authentication
             return jwtToken.Claims.ToList();
         }
 
+        //public async Task<string> GetUserIdByRefreshToken(string refreshToken)
+        //{
+        //    return (await context.RefreshTokens.FirstOrDefaultAsync(r => r.Token == refreshToken))!.UserId!;
+        //}
         public async Task<string> GetUserIdByRefreshToken(string refreshToken)
         {
-            return (await context.RefreshTokens.FirstOrDefaultAsync(r => r.Token == refreshToken))!.UserId!;
+            var refreshTokenEntity = await context.RefreshTokens
+                .FirstOrDefaultAsync(r => r.Token == refreshToken);
+
+            if (refreshTokenEntity == null || refreshTokenEntity.UserId == null)
+            {
+                return null!;
+            }
+
+            return refreshTokenEntity.UserId;
         }
 
         public Task<bool> RevokeRefreshToken(string email)
@@ -75,16 +87,34 @@ namespace eCommerce.Infrastructure.Repositories.Authentication
                 UserId = userId,
                 Token = refreshToken,
             };
-           var user = await context.RefreshTokens.FirstOrDefaultAsync(r => r.Token == refreshToken);
-            if(user == null)
+            var userRefreshToken = await context.RefreshTokens.FirstOrDefaultAsync(r => r.Token == refreshToken);
+            // if(user == null)
+            // {
+            //     return -1;
+            //     //context.RefreshTokens.Add(data);
+            // }
+            // else
+            // {
+            //     user.Token = refreshToken;
+            // }
+            if (userRefreshToken == null)
             {
-                return -1;
-                //context.RefreshTokens.Add(data);
+                // If no refresh token exists for the user, add a new one
+                var newRefreshToken = new RefreshToken
+                {
+                    UserId = userId,
+                    Token = refreshToken,
+                    // Optionally set other properties like expiry time
+                };
+                context.RefreshTokens.Add(newRefreshToken);
             }
             else
             {
-                user.Token = refreshToken;
-            }   
+                // If a refresh token exists, update it
+                userRefreshToken.Token = refreshToken;
+                // Optionally update other properties like expiry time
+            }
+
             return await context.SaveChangesAsync();
         }
 

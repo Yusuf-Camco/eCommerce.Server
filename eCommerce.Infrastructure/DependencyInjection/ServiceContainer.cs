@@ -3,10 +3,12 @@ using eCommerce.Domain.Entities;
 using eCommerce.Domain.Entities.Identity;
 using eCommerce.Domain.Interfaces;
 using eCommerce.Domain.Interfaces.Authentications;
+using eCommerce.Domain.Interfaces.Cart;
 using eCommerce.Infrastructure.Data;
 using eCommerce.Infrastructure.Middleware;
 using eCommerce.Infrastructure.Repositories;
 using eCommerce.Infrastructure.Repositories.Authentication;
+using eCommerce.Infrastructure.Repositories.Cart;
 using eCommerce.Infrastructure.Repositories.Services;
 using EntityFramework.Exceptions.SqlServer;
 using Microsoft.AspNetCore.Builder;
@@ -76,7 +78,7 @@ namespace eCommerce.Infrastructure.DependencyInjection
                         ValidIssuer = config["JWT:Issuer"],
                         ValidAudience = config["JWT:Audience"],
                         ClockSkew = TimeSpan.Zero,
-                        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:Key"]))
+                        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:Key"]!))
                     };
 
                     //opt.Audience = config["JWT:Audience"];
@@ -86,6 +88,7 @@ namespace eCommerce.Infrastructure.DependencyInjection
             services.AddScoped<IUserManagement, UserManagement>();
             services.AddScoped<IRoleManagement, RoleManagement>();
             services.AddScoped<ITokenManagement, TokenManagement>();
+            services.AddScoped<IPaymentMethod, PaymentMethodRepo>();
 
             return services;
         }
