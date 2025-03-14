@@ -88,6 +88,12 @@ namespace eCommerce.Application.Services.Implementations.Authentication
             string jwtToken = tokenManagement.GenerateAccessToken(claims);
             string refreshToken = tokenManagement.GetRefreshToken();
 
+            var userTokenCheck = await tokenManagement.ValidateRefreshToken(refreshToken);
+            var userId = await tokenManagement.GetUserIdByRefreshToken(refreshToken);
+            if (userTokenCheck)
+            {
+                var tokenResult = await tokenManagement.UpdateRefreshToken(userId, refreshToken);
+            } 
             int result = await tokenManagement.AddRefreshToken(_user!.Id!, refreshToken);
             return result <= 0 ? new LoginResponse
             {
@@ -95,7 +101,7 @@ namespace eCommerce.Application.Services.Implementations.Authentication
             } : new LoginResponse
             {
                 Success = true,
-                Message = "User loggedin",
+                Message = "User loggedin Successfully",
                 Token = jwtToken,
                 RefreshToken = refreshToken
             };

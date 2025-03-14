@@ -10,7 +10,7 @@ namespace eCommerce.Server.Controllers
     public class AuthController(IAuthenticationService authService) : ControllerBase()
     {
         
-        [HttpPost("create")]
+        [HttpPost("addUser")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUser user)
         {
             var result = await authService.CreateUser(user);
@@ -32,12 +32,11 @@ namespace eCommerce.Server.Controllers
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-
-        [HttpGet("revive/{refreshToken}")]
-        public async Task<IActionResult> ReviveToken(string refreshToken)
+        [HttpPost("reviveToken")]
+        public async Task<IActionResult> ReviveToken([FromBody] ReviveTokenRequest request)
         {
-            var result = await authService.ReviveToken(refreshToken);
-            return result.Success ? Ok(result) : BadRequest(result);
+            var result = await authService.ReviveToken(request.RefreshToken!);
+            return Ok(result);
         }
     }
 }
