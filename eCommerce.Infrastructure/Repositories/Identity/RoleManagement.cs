@@ -12,6 +12,13 @@ namespace eCommerce.Infrastructure.Repositories.Authentication
     {
         public async Task<bool> AddUserToRole(AppUser user, string roleName)
         {
+            var userRoles = await userManager.GetRolesAsync(user);
+
+            if (userRoles.Contains(roleName))
+            {
+                // User is already in the role
+                return true;
+            }
             var result = await userManager.AddToRoleAsync(user, roleName);
             return result.Succeeded;
         }

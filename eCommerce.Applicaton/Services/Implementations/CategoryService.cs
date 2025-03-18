@@ -1,14 +1,16 @@
 ﻿using AutoMapper;
 using eCommerce.Application.DTOs;
 using eCommerce.Application.DTOs.Category;
+using eCommerce.Application.DTOs.Products;
 using eCommerce.Application.Exceptions;
 using eCommerce.Application.Services.Interfaces;
 using eCommerce.Domain.Entities;
 using eCommerce.Domain.Interfaces;
+using eCommerce.Domain.Interfaces.CategorySpecifics;
 
 namespace eCommerce.Application.Services.Implementations
 {
-    public class CategoryService(IGeneric<Category> category, IMapper mapper) : ICategoryService
+    public class CategoryService(IGeneric<Category> category, IMapper mapper, ICategory cat) : ICategoryService
     {
         public async Task<ServiceResponse> AddAsync(CreateCategory entity)
         {
@@ -53,6 +55,13 @@ namespace eCommerce.Application.Services.Implementations
             var result = await category.UpdateAsync(mappedData);
             return result != null ? new ServiceResponse(true, "Category updated successfully")
                                   : new ServiceResponse(false, "Category failed to update");         
+        }
+
+        public async Task<IEnumerable<GetProduct>> GetProductsByCategoryAsync(Guid categoryId)
+        {
+            var products = await cat.GetProductsByCategory(categoryId);
+            if (!products.Any()) return [];
+            return mapper.Map<IEnumerable<GetProduct>>(products);
         }
     }
 }

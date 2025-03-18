@@ -1,4 +1,5 @@
 ﻿using eCommerce.Domain.Entities;
+using eCommerce.Domain.Entities.Cart;
 using eCommerce.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -16,11 +17,20 @@ namespace eCommerce.Infrastructure.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<PaymentMethod> PaymentMethods { get; set; }
+        public DbSet<Archive> CheckOutArchives { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<IdentityRole>()
+                .HasData(
+                new IdentityRole
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = "Credit Card"
+                });
             builder.Entity<IdentityRole>()
                 .HasData(
                 new IdentityRole

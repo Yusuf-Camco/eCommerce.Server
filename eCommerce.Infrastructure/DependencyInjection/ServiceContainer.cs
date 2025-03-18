@@ -1,24 +1,26 @@
-﻿using eCommerce.Application.Services.Interfaces.Logging;
+﻿using eCommerce.Application.Services.Interfaces.Cart;
+using eCommerce.Application.Services.Interfaces.Logging;
 using eCommerce.Domain.Entities;
 using eCommerce.Domain.Entities.Identity;
 using eCommerce.Domain.Interfaces;
 using eCommerce.Domain.Interfaces.Authentications;
+using eCommerce.Domain.Interfaces.Cart;
+using eCommerce.Domain.Interfaces.CategorySpecifics;
 using eCommerce.Infrastructure.Data;
 using eCommerce.Infrastructure.Middleware;
 using eCommerce.Infrastructure.Repositories;
 using eCommerce.Infrastructure.Repositories.Authentication;
+using eCommerce.Infrastructure.Repositories.Cart;
+using eCommerce.Infrastructure.Repositories.CategorySpecifics;
 using eCommerce.Infrastructure.Repositories.Services;
+using eCommerce.Infrastructure.Repostiories.Cart;
 using EntityFramework.Exceptions.SqlServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace eCommerce.Infrastructure.DependencyInjection
 {
@@ -35,7 +37,7 @@ namespace eCommerce.Infrastructure.DependencyInjection
                         sqlOptions.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
                         sqlOptions.EnableRetryOnFailure();
                     }).UseExceptionProcessor(),
-                    ServiceLifetime.Scoped);
+                    ServiceLifetime.Transient);
 
 
             services.AddScoped(typeof(IGeneric<Product>), typeof(Generic<Product>));
@@ -76,7 +78,7 @@ namespace eCommerce.Infrastructure.DependencyInjection
                         ValidIssuer = config["JWT:Issuer"],
                         ValidAudience = config["JWT:Audience"],
                         ClockSkew = TimeSpan.Zero,
-                        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:Key"]))
+                        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:Key"]!))
                     };
 
                     //opt.Audience = config["JWT:Audience"];
@@ -86,6 +88,11 @@ namespace eCommerce.Infrastructure.DependencyInjection
             services.AddScoped<IUserManagement, UserManagement>();
             services.AddScoped<IRoleManagement, RoleManagement>();
             services.AddScoped<ITokenManagement, TokenManagement>();
+            services.AddScoped<IPaymentMethod, PaymentMethodRepo>();
+            services.AddScoped<IPaymentService, StripePaymentService>();
+            services.AddScoped<ICategory, CategoryRepo>();
+
+            Stripe.StripeConfiguration.ApiKey = config["Stripe:SecretKey"];
 
             return services;
         }
