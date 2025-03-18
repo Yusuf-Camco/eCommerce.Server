@@ -1,4 +1,5 @@
 ﻿using eCommerce.Application.DTOs.Category;
+using eCommerce.Application.Services.Implementations;
 using eCommerce.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,6 +46,13 @@ namespace eCommerce.Server.Controllers
         {
             var result = await service.DeleteAsync(id);
             return result.Success ? Ok(result) : BadRequest(result);
+        }
+
+        [HttpGet("products-by-category/{categoryId}")]
+        public async Task<IActionResult> GetProductsByCategory(Guid categoryId)
+        {
+            var result = await service.GetProductsByCategoryAsync(categoryId);
+            return result.Any() ? Ok(result) : NotFound();
         }
     }
 }

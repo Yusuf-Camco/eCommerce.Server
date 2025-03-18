@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace eCommerce.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class _AuthAdded : Migration
+    public partial class _initMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -63,6 +63,33 @@ namespace eCommerce.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CheckOutArchives",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CheckOutArchives", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PaymentMethods",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PaymentMethods", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -213,8 +240,9 @@ namespace eCommerce.Infrastructure.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "63a5b9e5-3bb9-4b5e-af2b-53a9dd15f7c7", null, "USER", "USER" },
-                    { "742efe78-eb85-48f9-a9f6-3bf5273c0d5f", null, "ADMIN", "ADMIN" }
+                    { "03737617-808c-4844-a5de-fc8e20951f31", null, "Credit Card", null },
+                    { "68d73b90-f6d3-42c8-9ef1-cd2657b0b4e0", null, "USER", "USER" },
+                    { "a263c331-bb42-4276-9063-494fe00aab71", null, "ADMIN", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -279,6 +307,12 @@ namespace eCommerce.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "CheckOutArchives");
+
+            migrationBuilder.DropTable(
+                name: "PaymentMethods");
 
             migrationBuilder.DropTable(
                 name: "Products");

@@ -40,10 +40,10 @@ namespace eCommerce.Infrastructure.Repostiories.Cart
                 };
                 var service = new SessionService();
                 var session = service.CreateAsync(options);
-                return Task.FromResult(new ServiceResponse
+                return Task.FromResult(new ServiceResponse  
                 {
                     Success = true,
-                    Message = "Payment successful",
+                    Message = "Payment successful"
                     //Data = session
                 });
             }

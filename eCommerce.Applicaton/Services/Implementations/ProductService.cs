@@ -13,7 +13,6 @@ namespace eCommerce.Application.Services.Implementations
     {
         public async Task<ServiceResponse> AddAsync(CreateProduct entity)
         {
-            // CreateMap<CreateProduct, Product>().ReverseMap();
             var mappedData = mapper.Map<Product>(entity);
             int result = await product.AddAsync(mappedData);
             return result > 0 ? new ServiceResponse(true, "Product added successfully") : new ServiceResponse(false, "Product failed to be added!");

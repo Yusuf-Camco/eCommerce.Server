@@ -32,6 +32,7 @@ namespace eCommerce.Application.Mapping
 
             //Cart Mapping
             CreateMap<PaymentMethod, GetPaymentMethod>().ReverseMap();
+            CreateMap<CreateArchive, Archive>().ReverseMap();
         }
     }
 }

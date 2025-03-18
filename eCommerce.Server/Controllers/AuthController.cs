@@ -2,6 +2,7 @@
 using eCommerce.Application.Services.Interfaces.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Web;
 
 namespace eCommerce.Server.Controllers
 {
@@ -36,7 +37,14 @@ namespace eCommerce.Server.Controllers
         public async Task<IActionResult> ReviveToken([FromBody] ReviveTokenRequest request)
         {
             var result = await authService.ReviveToken(request.RefreshToken!);
-            return Ok(result);
+            return result.Success ? Ok(result) : BadRequest("Invalid token");
         }
+
+        //[HttpGet("refreshToken/{refreshToken}")]
+        //public async Task<IActionResult> ReviveToken(string refreshToken)
+        //{
+        //    var result = await authService.ReviveToken(HttpUtility.UrlEncode(refreshToken));
+        //    return result.Success ? Ok(result) : BadRequest($"ReviveToken {refreshToken} is invalid");
+        //}
     }
 }
