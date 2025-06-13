@@ -29,7 +29,7 @@ namespace eCommerce.Infrastructure.DependencyInjection
 
         public static IServiceCollection AddInfrastructureService(this IServiceCollection services, IConfiguration config)
         {
-            string connectionString = "DefaultConnection";
+            string connectionString = "eCommerceDbConnection";
             services.AddDbContext<AppDbContext>(options =>
                  options.UseSqlServer(config.GetConnectionString(connectionString),
                     sqlOptions =>
@@ -81,9 +81,9 @@ namespace eCommerce.Infrastructure.DependencyInjection
                         IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:Key"]!))
                     };
 
-                    //opt.Audience = config["JWT:Audience"];
-                    //opt.Authority = config["JWT:Authority"];
-                    //opt.RequireHttpsMetadata = false;
+                    opt.Audience = config["JWT:Audience"];
+                    opt.Authority = config["JWT:Authority"];
+                    opt.RequireHttpsMetadata = false;
                 });
             services.AddScoped<IUserManagement, UserManagement>();
             services.AddScoped<IRoleManagement, RoleManagement>();

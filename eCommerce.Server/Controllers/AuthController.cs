@@ -22,7 +22,7 @@ namespace eCommerce.Server.Controllers
         public async Task<IActionResult> GetAll()
         {
             var result = await authService.GetAllUsers();
-            return result.Count() > 0 ? Ok(result) : NotFound(result);
+            return result.Any() ? Ok(result) : NotFound(result);
         }
 
 

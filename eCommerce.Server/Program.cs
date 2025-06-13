@@ -1,4 +1,3 @@
-using System.ComponentModel.Design;
 using eCommerce.Application.DependencyInjection;
 using eCommerce.Infrastructure.DependencyInjection;
 using Serilog;
@@ -12,7 +11,7 @@ Log.Logger = new LoggerConfiguration()
 // Add services to the container.
 
 
-//builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
+builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
 builder.Host.UseSerilog();
 Log.Logger.Information("Application Starting........");
 
